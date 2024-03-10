@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -9,22 +8,20 @@ using UnityEngine.Networking;
 public class GeminiRequest : MonoBehaviour
 {
     private Root parsedJson = new();
-    
+    private TTSResponse parsedTTSJson = new();
     [SerializeField] 
     private TMP_InputField requestInput;
     [SerializeField] 
     private TextMeshProUGUI requestResponse;
     [SerializeField] private AudioSource audioSource;
+    
+    string ttsURL = "http://localhost:5000/";
+
     public void SendRequest()
     {
         StartCoroutine(AIRequest($"{{\"contents\":[{{\"parts\":[{{\"text\":\"{requestInput.text}\"}}]}}]}}"));
     }
-
-    private void Start()
-    {
-        StartCoroutine(AIRequest($"{{\"contents\":[{{\"parts\":[{{\"text\":\"Türkçe çok kısa bir cümle kurar mısın\"}}]}}]}}"));
-    }
-
+    
     IEnumerator AIRequest(string requestStr)
     {
         string URL =
@@ -43,16 +40,32 @@ public class GeminiRequest : MonoBehaviour
                 Debug.Log(www.downloadHandler.text);
                 JsonUtility.FromJsonOverwrite(www.downloadHandler.text, parsedJson);
                 requestResponse.text = parsedJson.candidates[0].content.parts[0].text;
-                StartCoroutine(ClipRequest($"{{\"text\":\"{parsedJson.candidates[0].content.parts[0].text}\"}}"));
+                StartCoroutine(TTSRequest($"{{\"text\":\"{parsedJson.candidates[0].content.parts[0].text}\"}}"));
             }
         }
     }
 
-    IEnumerator ClipRequest(string jsonData)
+    IEnumerator ClipRequest(string fileName)
     {
-        string ttsURL = "http://localhost:5000/tts";
-        Debug.Log(jsonData);
-        using (UnityWebRequest wwwClip = UnityWebRequest.Post(ttsURL, jsonData, "application/json"))
+        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(ttsURL + "get_tts?filename=" + fileName, AudioType.MPEG))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                AudioClip myClip = DownloadHandlerAudioClip.GetContent(www);
+                audioSource.clip = myClip;
+            }
+        }
+    }
+    
+    IEnumerator TTSRequest(string jsonData)
+    {
+        using (UnityWebRequest wwwClip = UnityWebRequest.Post(ttsURL + "tts", jsonData, "application/json"))
         {
             yield return wwwClip.SendWebRequest();
 
@@ -62,29 +75,16 @@ public class GeminiRequest : MonoBehaviour
             }
             else
             {
-                byte[] audioBytes = wwwClip.downloadHandler.data;
-                float[] f = ConvertByteToFloat(audioBytes);
-                AudioClip audioClip = AudioClip.Create("testSound", f.Length, 1, 44100, false, false);
-                audioClip.SetData(f, 0);
-                audioSource.clip = audioClip;
-                audioSource.Play();
+                JsonUtility.FromJsonOverwrite(wwwClip.downloadHandler.text, parsedTTSJson);
+                StartCoroutine(ClipRequest(parsedTTSJson.filename));
             }
         }
     }
-    
-    private float[] ConvertByteToFloat(byte[] array) 
+
+    public void PlayAudio()
     {
-        float[] floatArr = new float[array.Length / 4];
-        for (int i = 0; i < floatArr.Length; i++) 
-        {
-            if (BitConverter.IsLittleEndian) 
-                Array.Reverse(array, i * 4, 4);
-            floatArr[i] = BitConverter.ToSingle(array, i*4) / 0x80000000;
-        }
-        return floatArr;
-    } 
-
-
+        audioSource.Play();
+    }
 
 }
 
@@ -123,5 +123,11 @@ public class SafetyRating
 {
     public string category ;
     public string probability ;
+}
+
+[Serializable]
+public class TTSResponse
+{
+    public string filename;
 }
 
