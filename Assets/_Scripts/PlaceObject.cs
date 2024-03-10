@@ -40,7 +40,24 @@ public class PlaceObject : MonoBehaviour
 
         if (arRaycastManager.Raycast(finger.currentTouch.screenPosition, hits, TrackableType.PlaneWithinPolygon))
         {
-            
+            foreach (ARRaycastHit hit in hits)
+            {
+                Pose pose = hit.pose;
+                if (hits.Count < 2)
+                {
+                    GameObject obj = Instantiate(prefab, pose.position, pose.rotation);
+                    if (arPlaneManager.GetPlane(hit.trackableId).alignment == PlaneAlignment.HorizontalUp)
+                    {
+                        Vector3 position = obj.transform.position;
+                        Vector3 cameraPosition = Camera.main.transform.position;
+                        Vector3 direction = cameraPosition - position;
+                        Vector3 targetRotationEuler = Quaternion.LookRotation(direction).eulerAngles;
+                        Vector3 scaledEuler = Vector3.Scale(targetRotationEuler, obj.transform.up.normalized);
+                        Quaternion targetRotation = Quaternion.Euler(scaledEuler);
+                        obj.transform.rotation *= targetRotation;
+                    }
+                }
+            }
         }
     }
 }
