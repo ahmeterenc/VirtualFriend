@@ -210,6 +210,8 @@ namespace OpenCVForUnityExample
                     //Debug.Log ("detect faces " + rects [i]);
 
                     Imgproc.rectangle(rgbaMat, new Point(rects[i].x, rects[i].y), new Point(rects[i].x + rects[i].width, rects[i].y + rects[i].height), new Scalar(255, 0, 0, 255), 2);
+                    Debug.Log("Face Detected: " + rects.Length);
+                    SceneManager.LoadScene("Home");
                 }
 
                 //Imgproc.putText (rgbaMat, "W:" + rgbaMat.width () + " H:" + rgbaMat.height () + " SO:" + Screen.orientation, new Point (5, rgbaMat.rows () - 10), Imgproc.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar (255, 255, 255, 255), 2, Imgproc.LINE_AA, false);
