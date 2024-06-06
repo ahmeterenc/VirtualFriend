@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 26
-  productGUID: 9e3980dedfbf09548801fefb16e0b2e9
+  productGUID: d35c419c1cf441f4b8e012490f55776b
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: "Sanal Arkada\u015F\u0131m"
+  productName: Virtual-Friend-New
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -829,14 +829,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: VirtualFriend
+  metroPackageName: Virtual-Friend-New
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: VirtualFriend
+  metroApplicationDescription: Virtual-Friend-New
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -905,14 +905,14 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: 18f0f764-7d63-42cd-a1af-481417e74e7e
+  cloudProjectId: ffa6f918-b238-41b6-99b8-b233c61545ae
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: VirtualFriend 2024-05-28_21-33-41
+  projectName: Virtual-Friend-New 2024-06-03_12-13-14
   organizationId: unity_774607dea031b6149b22
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
   platformRequiresReadableAssets: 0
   virtualTexturingSupportEnabled: 0
-  insecureHttpOption: 0
+  insecureHttpOption: 2

@@ -11,11 +11,11 @@ public class GeminiRequest : MonoBehaviour
     private TTSResponse parsedTTSJson = new();
     [SerializeField] 
     private TMP_InputField requestInput;
-    [SerializeField] 
-    private TextMeshProUGUI requestResponse;
+    // [SerializeField] 
+    // private TextMeshProUGUI requestResponse;
     [SerializeField] private AudioSource audioSource;
     
-    string ttsURL = "http://localhost:5000/";
+    string ttsURL = "http://10.65.0.48:5000/";
 
     public void SendRequest()
     {
@@ -39,7 +39,7 @@ public class GeminiRequest : MonoBehaviour
             {
                 Debug.Log(www.downloadHandler.text);
                 JsonUtility.FromJsonOverwrite(www.downloadHandler.text, parsedJson);
-                requestResponse.text = parsedJson.candidates[0].content.parts[0].text;
+                //requestResponse.text = parsedJson.candidates[0].content.parts[0].text;
                 StartCoroutine(TTSRequest($"{{\"text\":\"{parsedJson.candidates[0].content.parts[0].text}\"}}"));
             }
         }
